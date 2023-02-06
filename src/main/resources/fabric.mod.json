@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "tgbridge",
+  "version": "${version}",
+
+  "name": "Fabric Tg Bridge",
+  "description": "Sync message between telegram group and fabric minecraft server.",
+  "authors": [
+    "坊洛"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/tgbridge/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "cuteneko.bridge.KtMod"
+    ]
+  },
+  "mixins": [
+  ],
+  "depends": {
+    "fabricloader": ">=0.8.7",
+    "fabric": "*",
+    "fabric-language-kotlin": "*",
+    "minecraft": "1.19.x"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}
