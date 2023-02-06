@@ -12,23 +12,27 @@ import net.minecraft.text.Text
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class KtMod : ModInitializer {
+class Bridge : ModInitializer {
     override fun onInitialize() {
         // This code runs as soon as Minecraft is in a mod-load-ready state.
         // However, some things (like resources) may still be uninitialized.
         // Proceed with mild caution.
         LOGGER.info("Hello Fabric world!")
+        Instance = this
         ServerMessageEvents.CHAT_MESSAGE.register(
             ServerMessageEvents.ChatMessage { message: SignedMessage?, sender: ServerPlayerEntity?, params: MessageType.Parameters? ->
+                val senderName = sender?.displayName.getFormattedString()
+                val msg = message?.content.getFormattedString()
                 LOGGER.info(
                     "ChatTest: {} sent \"{}\"",
-                    sender,
-                    message
+                    senderName,
+                    msg
                 )
             }
         )
         ServerMessageEvents.GAME_MESSAGE.register(
             ServerMessageEvents.GameMessage { server: MinecraftServer?, message: Text?, overlay: Boolean ->
+                val msg = message.getFormattedString()
                 LOGGER.info(
                     "ChatTest: server sent \"{}\"",
                     message
@@ -50,5 +54,7 @@ class KtMod : ModInitializer {
         // It is considered best practice to use your mod id as the logger's name.
         // That way, it's clear which mod wrote info, warnings, and errors.
         val LOGGER: Logger = LoggerFactory.getLogger("bridge")
+
+        lateinit var Instance: Bridge
     }
 }

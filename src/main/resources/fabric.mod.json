@@ -19,7 +19,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "cuteneko.bridge.KtMod"
+      "cuteneko.bridge.Bridge"
     ]
   },
   "mixins": [
