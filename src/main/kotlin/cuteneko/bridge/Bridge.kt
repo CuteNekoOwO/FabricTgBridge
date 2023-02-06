@@ -1,6 +1,7 @@
 package cuteneko.bridge
 
 import net.fabricmc.api.ModInitializer
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents.CommandMessage
 import net.minecraft.network.message.MessageType
@@ -8,6 +9,8 @@ import net.minecraft.network.message.SignedMessage
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.text.LiteralTextContent
+import net.minecraft.text.Style
 import net.minecraft.text.Text
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -19,31 +22,35 @@ class Bridge : ModInitializer {
         // Proceed with mild caution.
         LOGGER.info("Hello Fabric world!")
         Instance = this
-        ServerMessageEvents.CHAT_MESSAGE.register(
-            ServerMessageEvents.ChatMessage { message: SignedMessage?, sender: ServerPlayerEntity?, params: MessageType.Parameters? ->
-                val senderName = sender?.displayName.getFormattedString()
-                val msg = message?.content.getFormattedString()
-                LOGGER.info(
-                    "ChatTest: {} sent \"{}\"",
-                    senderName,
-                    msg
-                )
-            }
-        )
-        ServerMessageEvents.GAME_MESSAGE.register(
-            ServerMessageEvents.GameMessage { server: MinecraftServer?, message: Text?, overlay: Boolean ->
-                val msg = message.getFormattedString()
-                LOGGER.info(
-                    "ChatTest: server sent \"{}\"",
-                    message
-                )
-            }
-        )
+
+        ServerLifecycleEvents.SERVER_STARTED.register {
+            Server = it
+        }
+
+        ServerMessageEvents.CHAT_MESSAGE.register {
+                message: SignedMessage?, sender: ServerPlayerEntity?, _ ->
+            val senderName = sender?.displayName.getFormattedString()
+            val msg = message?.content.getFormattedString()
+            LOGGER.info(
+                "ChatTest: {} sent \"{}\"",
+                senderName,
+                msg
+            )
+        }
+        ServerMessageEvents.GAME_MESSAGE.register {
+                _, message: Text?, _ ->
+            val msg = message.getFormattedString()
+            LOGGER.info(
+                "ChatTest: server sent \"{}\"",
+                msg
+            )
+        }
         ServerMessageEvents.COMMAND_MESSAGE.register(
             CommandMessage { message: SignedMessage?, source: ServerCommandSource?, params: MessageType.Parameters? ->
+                val msg = message?.content.getFormattedString()
                 LOGGER.info(
                     "ChatTest: command sent \"{}\"",
-                    message
+                    msg
                 )
             }
         )
@@ -56,5 +63,11 @@ class Bridge : ModInitializer {
         val LOGGER: Logger = LoggerFactory.getLogger("bridge")
 
         lateinit var Instance: Bridge
+        lateinit var Server: MinecraftServer
+        fun SendMessage(text: Text?) {
+            Server.playerManager.playerList.forEach{
+                it.sendMessage(text)
+            }
+        }
     }
 }

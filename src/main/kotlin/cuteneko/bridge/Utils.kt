@@ -8,13 +8,12 @@ fun Text?.getFormattedString() : String {
     if (this == null) {
         return ""
     }
-    Bridge.LOGGER.info(this::class.java.typeName)
     var result = when(val content = this.content) {
         is LiteralTextContent -> {
             content.string.escapeHTML()
         }
         is TranslatableTextContent -> {
-            TODO()
+            return this.string
         }
         else -> {
             println(content)
