@@ -19,7 +19,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "cuteneko.bridge.Bridge"
+      "cuteneko.tgbridge.Bridge"
     ]
   },
   "mixins": [
