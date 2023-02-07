@@ -81,4 +81,3 @@ data class Media(
 
 data class BotCommand(val command: String, val description: String)
 
-data class SetMyCommands(val commands: List<BotCommand>)

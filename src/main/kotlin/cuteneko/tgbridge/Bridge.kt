@@ -1,13 +1,17 @@
 package cuteneko.tgbridge
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import cuteneko.tgbridge.tgbot.TgBot
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import net.fabricmc.api.ModInitializer
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents
 import net.minecraft.network.message.SignedMessage
 import net.minecraft.server.MinecraftServer
+import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import org.slf4j.Logger
@@ -31,18 +35,35 @@ class Bridge : ModInitializer {
             return
         }
 
-        val bot = TgBot()
-        GlobalScope.launch { bot.startPolling() }
+        BOT = TgBot()
+        GlobalScope.launch { BOT.startPolling() }
+
+        CommandRegistrationCallback.EVENT.register{ dispatcher, registryAccess, environment ->
+            dispatcher.register(LiteralArgumentBuilder.literal<ServerCommandSource?>("tgbridge_reload")
+                .requires {
+                    it.hasPermissionLevel(4)
+                }
+                .executes {
+                    CONFIG = ConfigLoader.load()
+                    runBlocking {
+                        BOT.stop()
+                        BOT = TgBot()
+                        BOT.startPolling()
+                    }
+                    it.source.sendMessage(Text.literal("Reloaded!"))
+                    0
+                })
+        }
 
         ServerLifecycleEvents.SERVER_STARTED.register {
             SERVER = it
-            if(CONFIG.sendServerStarted) GlobalScope.launch { bot.sendMessageToTelegram(CONFIG.serverStartedMessage)}
+            if(CONFIG.sendServerStarted) GlobalScope.launch { BOT.sendMessageToTelegram(CONFIG.serverStartedMessage)}
         }
 
         ServerLifecycleEvents.SERVER_STOPPING.register {
             GlobalScope.launch {
-                bot.stop()
-                if(CONFIG.sendServerStopping)  bot.sendMessageToTelegram(CONFIG.serverStoppingMessage)
+                BOT.stop()
+                if(CONFIG.sendServerStopping)  BOT.sendMessageToTelegram(CONFIG.serverStoppingMessage)
             }
 
         }
@@ -52,14 +73,14 @@ class Bridge : ModInitializer {
             if(!CONFIG.sendChatMessage) return@register
             val senderName = sender?.displayName.toPlainString()
             val msg = message?.content.toPlainString()
-            GlobalScope.launch { bot.sendMessageToTelegram(msg.escapeHTML(), senderName.escapeHTML()) }
+            GlobalScope.launch { BOT.sendMessageToTelegram(msg.escapeHTML(), senderName.escapeHTML()) }
         }
 
         ServerMessageEvents.GAME_MESSAGE.register {
                 _, message: Text?, _ ->
             if(!CONFIG.sendGameMessage) return@register
             val msg = message.toPlainString()
-            GlobalScope.launch { bot.sendMessageToTelegram(msg) }
+            GlobalScope.launch { BOT.sendMessageToTelegram(msg) }
         }
     }
 
@@ -74,6 +95,7 @@ class Bridge : ModInitializer {
         lateinit var SERVER: MinecraftServer
         lateinit var CONFIG: Config
         lateinit var LANG: Map<String, String>
+        lateinit var BOT: TgBot
         fun sendMessage(text: Text?) {
             SERVER.playerManager.playerList.forEach{
                 it.sendMessage(text)

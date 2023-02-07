@@ -7,14 +7,21 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
 import net.minecraft.text.Text
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.time.Duration
 import java.util.*
 
 class TgBot {
     private val config = Bridge.CONFIG
-    private val api = Retrofit.Builder()
+    private val client = OkHttpClient
+        .Builder()
+        .readTimeout(Duration.ZERO)
+        .build()
+    internal val api = Retrofit.Builder()
         .baseUrl("https://${config.telegramAPI}/bot${config.botToken}/")
+        .client(client)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(TgApi::class.java)
@@ -28,6 +35,13 @@ class TgBot {
 
     private suspend fun initialize() {
         me = api.getMe().result!!
+        val commands = arrayOf(
+            BotCommand("chatID", "Get current chat ID."),
+            BotCommand("cmd", "Run command."),
+            BotCommand("list", "Show online players."),
+            BotCommand("meow", "Meow!")
+        )
+        api.setMyCommands(commands)
     }
 
 
@@ -79,7 +93,7 @@ class TgBot {
         }
     }
 
-    private fun handleUpdate(update: Update) {
+    private suspend fun handleUpdate(update: Update) {
         // Ignore private message or channel post
         if (update.message?.chat?.type != "group" && update.message?.chat?.type != "supergroup")
             return
@@ -96,7 +110,10 @@ class TgBot {
                     if (cmds[1] != me!!.username) return
                     cmds[0].substring(1)
                 } else args[0].substring(1)
-
+                commandMap[cmd]?.run {
+                    this(ctx.copy(commandArgs = args))
+                }
+                return
             }
             onMessageHandler(ctx)
         }

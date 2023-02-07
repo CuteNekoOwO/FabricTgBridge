@@ -20,7 +20,7 @@ fun Text?.toPlainString(formatted: Boolean = true): String {
                 val lang = Bridge.LANG
                 if(!lang.containsKey(content.key)) content.key
                 val args = content.args.map { (it as Text).toPlainString() }.toTypedArray()
-                String.format(lang[content.key]!!, *args)
+                String.format(lang[content.key]!!.escapeHTML(), *args)
             }
 
             else -> {
