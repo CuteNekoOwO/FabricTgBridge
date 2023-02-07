@@ -3,9 +3,7 @@ package cuteneko.tgbridge
 import com.google.gson.GsonBuilder
 import cuteneko.tgbridge.tgbot.I18n
 import net.fabricmc.loader.api.FabricLoader
-import java.io.FileNotFoundException
-import java.nio.charset.Charset
-import java.nio.file.OpenOption
+import java.io.InputStreamReader
 import kotlin.io.path.*
 
 object ConfigLoader {
@@ -29,7 +27,11 @@ object ConfigLoader {
 
     fun getLang(): Map<String, String> {
         val path = FabricLoader.getInstance().configDir.resolve(Bridge.MOD_ID).resolve("lang.json")
-        if(!path.exists()) throw FileNotFoundException()
+        if(!path.exists()) {
+            val stream = javaClass.classLoader.getResourceAsStream("assets/lang.json")
+            val reader = InputStreamReader(stream)
+            path.writeText(reader.readText())
+        }
         return gson.fromJson<Map<String, String>>(path.reader(), Map::class.java)
     }
 
