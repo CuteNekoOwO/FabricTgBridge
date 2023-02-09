@@ -1,4 +1,5 @@
 # FabricTgBridge
+
 在Fabric Minecraft服务器和Telegram群组间同步消息。
 
 [English](./README.md)
