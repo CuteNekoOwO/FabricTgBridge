@@ -1,9 +1,10 @@
-//
+import com.github.jengelman.gradle.plugins.shadow.tasks.ConfigureShadowRelocation
 
 plugins {
     id 'fabric-loom' version '1.1-SNAPSHOT'
     id 'maven-publish'
     id "org.jetbrains.kotlin.jvm"
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -21,6 +22,8 @@ repositories {
 	// for more information about repositories.
 }
 
+configurations { using }
+
 dependencies {
     //to change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -34,9 +37,9 @@ dependencies {
 
     // PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
     // You may need to force-disable transitiveness on them.
-    implementation 'com.google.code.gson:gson:2.10.1'
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    using implementation('com.google.code.gson:gson:2.10.1')
+    using implementation('com.squareup.retrofit2:retrofit:2.9.0')
+    using implementation('com.squareup.retrofit2:converter-gson:2.9.0')
 }
 
 processResources {
@@ -68,6 +71,32 @@ jar {
     from ("LICENSE") {
         rename { "${it}_${project.archivesBaseName}"}
     }
+}
+
+task remap(type: Copy) {
+    dependsOn(remapJar)
+    from(zipTree(tasks.remapJar.archiveFile))
+    into("build/classes/kotlin/main")
+}
+
+shadowJar {
+    dependsOn(remap)
+//    archiveClassifier.set('')
+    configurations = [project.configurations.using]
+//    relocate("com.google.code.gson", "cuteneko.tgbridge.shadow.com.google.code.gson")
+//    relocate("com.squareup.retrofit2", "cuteneko.tgbridge.shadow.com.squareup.retrofit2")
+//    dependsOn(tasks.relocateShadowJar)
+//    inputs.sourceFiles.files.addAll(remapJar.outputs.files)
+//    dependsOn(remapJar)
+}
+
+
+remapJar{
+//    dependsOn(shadowJar)
+//    inputFile = tasks.shadowJar.archiveFile
+//    sourceNamespace = "cuteneko.tgbridge"
+//    targetNamespace = "cuteneko.tgbridge"
+//    addNestedDependencies = true
 }
 
 // configure the maven publication

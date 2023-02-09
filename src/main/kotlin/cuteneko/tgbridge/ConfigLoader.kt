@@ -1,10 +1,14 @@
+@file:OptIn(DelicateCoroutinesApi::class)
+
 package cuteneko.tgbridge
 
 import com.google.gson.GsonBuilder
 import cuteneko.tgbridge.tgbot.I18n
+import kotlinx.coroutines.DelicateCoroutinesApi
 import net.fabricmc.loader.api.FabricLoader
 import java.io.InputStreamReader
 import kotlin.io.path.*
+
 
 object ConfigLoader {
 

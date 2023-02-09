@@ -17,13 +17,14 @@ fun Message.toText(trim: Int = 20, showMore: Boolean = true): Text {
             Text.literal(
                 i18n.reply.format(
                     it.from?.rawUserMention(),
-                    it.toText(10, false)
+                    it.toText(10, false).toPlainString()
                 )
             )
-        ).setStyle(
-            Style.EMPTY
-                .withColor(Formatting.GOLD)
-                .withHoverEvent(HoverEvent(HoverEvent.Action.SHOW_TEXT, it.toText()))
+                .setStyle(
+                    Style.EMPTY
+                        .withColor(Formatting.GOLD)
+                        .withHoverEvent(HoverEvent(HoverEvent.Action.SHOW_TEXT, it.toText(0)))
+                )
         )
     }
 

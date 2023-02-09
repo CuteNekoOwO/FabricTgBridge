@@ -1,3 +1,5 @@
+@file:OptIn(DelicateCoroutinesApi::class)
+
 package cuteneko.tgbridge.tgbot
 
 import cuteneko.tgbridge.Bridge
@@ -46,7 +48,12 @@ class TgBot {
 
 
     suspend fun startPolling() {
-        initialize()
+        try {
+            initialize()
+        } catch(e:Exception) {
+            Bridge.LOGGER.error("Failed to initialize! Check your network and configuration!")
+            Bridge.LOGGER.error(e.message)
+        }
         pollJob = initPolling()
         handlerJob = initHandler()
     }
@@ -74,7 +81,7 @@ class TgBot {
                 when (e) {
                     is CancellationException -> break@loop
                     else -> {
-                        e.printStackTrace()
+                        Bridge.LOGGER.error(e.message)
                         continue@loop
                     }
                 }
@@ -133,7 +140,7 @@ class TgBot {
         val text = Text.empty()
         repeat(msgs.size - 1) { i ->
             text.append(msgs[i])
-            text.append(msg.toText())
+            text.append(msg.toText(Bridge.CONFIG.messageTrim))
         }
         text.append(msgs.last())
 

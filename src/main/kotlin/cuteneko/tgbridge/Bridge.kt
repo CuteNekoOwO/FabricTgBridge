@@ -1,7 +1,10 @@
+@file:OptIn(DelicateCoroutinesApi::class)
+
 package cuteneko.tgbridge
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import cuteneko.tgbridge.tgbot.TgBot
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -18,12 +21,13 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.FileNotFoundException
 
+
 class Bridge : ModInitializer {
     override fun onInitialize() {
         // This code runs as soon as Minecraft is in a mod-load-ready state.
         // However, some things (like resources) may still be uninitialized.
         // Proceed with mild caution.
-        LOGGER.info("Hello Fabric world!")
+        LOGGER.info("Telegram bridge loaded!")
         INSTANCE = this
         CONFIG = ConfigLoader.load()
         ConfigLoader.save(CONFIG)
@@ -38,7 +42,7 @@ class Bridge : ModInitializer {
         BOT = TgBot()
         GlobalScope.launch { BOT.startPolling() }
 
-        CommandRegistrationCallback.EVENT.register{ dispatcher, registryAccess, environment ->
+        CommandRegistrationCallback.EVENT.register{ dispatcher, _, _ ->
             dispatcher.register(LiteralArgumentBuilder.literal<ServerCommandSource?>("tgbridge_reload")
                 .requires {
                     it.hasPermissionLevel(4)
@@ -100,6 +104,7 @@ class Bridge : ModInitializer {
             SERVER.playerManager.playerList.forEach{
                 it.sendMessage(text)
             }
+            SERVER.sendMessage(text)
         }
     }
 }

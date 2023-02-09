@@ -1,6 +1,9 @@
+@file:OptIn(DelicateCoroutinesApi::class)
+
 package cuteneko.tgbridge
 
 import cuteneko.tgbridge.tgbot.User
+import kotlinx.coroutines.DelicateCoroutinesApi
 import net.minecraft.text.LiteralTextContent
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableTextContent

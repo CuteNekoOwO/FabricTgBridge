@@ -1,10 +1,10 @@
+@file:OptIn(DelicateCoroutinesApi::class)
+
 package cuteneko.tgbridge.tgbot
 
 import cuteneko.tgbridge.Bridge
 import cuteneko.tgbridge.toPlainString
-import net.minecraft.server.command.ServerCommandSource
-import com.mojang.brigadier.ResultConsumer
-import com.mojang.brigadier.context.CommandContext
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import net.minecraft.server.command.CommandOutput

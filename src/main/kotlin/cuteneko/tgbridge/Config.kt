@@ -6,6 +6,7 @@ data class Config (
     var telegramAPI: String = "api.telegram.org",
     var pollTimeout: Int = 5,
     var sendChatMessage: Boolean = true,
+    var messageTrim: Int = 20,
     var sendGameMessage: Boolean = true,
     var sendTelegramMessage: Boolean = true,
     var sendServerStarted: Boolean = true,
