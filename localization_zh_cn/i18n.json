@@ -1,0 +1,17 @@
+{
+  "reply": "[回复 %1$s: \"%2$s\"] ",
+  "forwarded": "[转发] ",
+  "forwardedFromUser": "转发自用户 %s",
+  "forwardedFromChannel": "转发自频道 %s",
+  "forwardedFromGroup": "转发自群组身份 %s",
+  "photo": "[图片] ",
+  "sticker": "[%s贴纸] ",
+  "stickerFrom": "来自贴纸包 %s",
+  "document": "[文件 %s] ",
+  "voice": "[语音 %ss] ",
+  "audio": "[音频 %ss] ",
+  "video": "[视频 %ss] ",
+  "poll": "[投票 %s] ",
+  "message": "[消息] ",
+  "more": "[全文]"
+}

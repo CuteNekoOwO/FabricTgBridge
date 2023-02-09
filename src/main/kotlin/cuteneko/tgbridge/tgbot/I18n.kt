@@ -15,5 +15,5 @@ data class I18n (
     var video: String = "[Video %ss] ",
     var poll: String = "[Poll %s] ",
     var message: String = "[Message] ",
-    var more: String = "[More] "
+    var more: String = "[More]"
 )

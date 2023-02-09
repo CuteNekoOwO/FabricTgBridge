@@ -1,14 +1,14 @@
 package cuteneko.tgbridge
 
 data class Config (
-    var botToken: String = "",
+    var botToken: String = "YOUR BOT TOKEN HERE",
     var chatId: Long = 0,
     var telegramAPI: String = "api.telegram.org",
     var pollTimeout: Int = 5,
     var sendChatMessage: Boolean = true,
-    var messageTrim: Int = 20,
     var sendGameMessage: Boolean = true,
     var sendTelegramMessage: Boolean = true,
+    var messageTrim: Int = 20,
     var sendServerStarted: Boolean = true,
     var sendServerStopping: Boolean = true,
     var minecraftFormat: String = "<%1\$s> %2\$s",
