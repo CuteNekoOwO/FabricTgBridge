@@ -23,7 +23,7 @@
 
 ## 配置
 
-配置文件在 `config/tgbridge/config.json` 。这是个JSON文件~~（显而易见😋）~~。
+配置文件在 `config/tgbridge/config.json` 。这是个JSON文件 ~~（显而易见😋）~~。
 
 具体说明如下。
 
