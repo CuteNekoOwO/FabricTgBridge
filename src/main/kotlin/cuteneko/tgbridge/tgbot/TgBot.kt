@@ -4,7 +4,6 @@ package cuteneko.tgbridge.tgbot
 
 import cuteneko.tgbridge.Bridge
 import cuteneko.tgbridge.rawUserMention
-import cuteneko.tgbridge.tgbot.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
@@ -12,13 +11,16 @@ import net.minecraft.text.Text
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.net.InetSocketAddress
+import java.net.Proxy
 import java.time.Duration
-import java.util.*
 
 class TgBot {
     private val config = Bridge.CONFIG
+    private val proxy = if (!config.proxyEnabled) Proxy.NO_PROXY else Proxy(Proxy.Type.HTTP, InetSocketAddress(config.proxyHost, config.proxyPort))
     private val client = OkHttpClient
         .Builder()
+        .proxy(proxy)
         .readTimeout(Duration.ZERO)
         .build()
     internal val api = Retrofit.Builder()

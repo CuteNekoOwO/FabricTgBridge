@@ -16,5 +16,8 @@ data class Config (
     var serverStartedMessage: String = "Server has started!",
     var serverStoppingMessage: String = "Server is stopping!",
     var admins: List<String> = listOf(),
-    var noPermission: String = "No permission!"
+    var noPermission: String = "No permission!",
+    var proxyEnabled: Boolean = false,
+    var proxyHost: String = "localhost",
+    var proxyPort: Int = 10809,
 )
