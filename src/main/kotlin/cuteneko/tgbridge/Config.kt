@@ -5,6 +5,7 @@ data class Config (
     var chatId: Long = 0,
     var telegramAPI: String = "api.telegram.org",
     var pollTimeout: Int = 5,
+    var useHtmlFormat: Boolean = true,
     var sendChatMessage: Boolean = true,
     var sendGameMessage: Boolean = true,
     var sendTelegramMessage: Boolean = true,

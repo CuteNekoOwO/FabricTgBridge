@@ -159,26 +159,10 @@ class TgBot(val LOGGER: Logger) {
             String.format(config.telegramFormat, username, text)
         } ?: text
         try {
-            val result = api.sendMessage(config.chatId, formatted)
-            if(!result.ok) {
-                LOGGER.error(result.description)
-            }
-        } catch (e: HttpException) {
-            e.response()?.errorBody()?.string()?.let {
-                LOGGER.error(it)
-                LOGGER.error(formatted)
-            }
-        } catch (e: Exception) {
-            LOGGER.error(e.message)
-        }
-    }
-
-    suspend fun sendMessageWithoutParse(text: String, username: String? = null) {
-        val formatted = username?.let {
-            String.format(config.telegramFormat, username, text)
-        } ?: text
-        try {
-            val result = api.sendMessageWithoutParse(config.chatId, formatted)
+            val result = if(config.useHtmlFormat)
+                api.sendMessage(config.chatId, formatted)
+            else
+                api.sendMessageWithoutParse(config.chatId, formatted)
             if(!result.ok) {
                 LOGGER.error(result.description)
             }
