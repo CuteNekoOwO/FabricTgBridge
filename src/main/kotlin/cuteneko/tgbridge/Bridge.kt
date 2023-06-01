@@ -32,6 +32,11 @@ class Bridge : ModInitializer {
         CONFIG = ConfigLoader.load()
         ConfigLoader.save(CONFIG)
 
+        if(CONFIG.botToken == "YOUR BOT TOKEN HERE") {
+            LOGGER.info("Please edit config file!")
+            return
+        }
+
         try {
             LANG = ConfigLoader.getLang()
         } catch (e:FileNotFoundException) {
@@ -39,7 +44,7 @@ class Bridge : ModInitializer {
             return
         }
 
-        BOT = TgBot()
+        BOT = TgBot(LOGGER)
         GlobalScope.launch { BOT.startPolling() }
 
         CommandRegistrationCallback.EVENT.register{ dispatcher, _, _ ->
@@ -51,7 +56,7 @@ class Bridge : ModInitializer {
                     CONFIG = ConfigLoader.load()
                     runBlocking {
                         BOT.stop()
-                        BOT = TgBot()
+                        BOT = TgBot(LOGGER)
                         BOT.startPolling()
                     }
                     it.source.sendMessage(Text.literal("Reloaded!"))

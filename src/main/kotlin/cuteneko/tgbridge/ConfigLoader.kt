@@ -33,7 +33,7 @@ object ConfigLoader {
         val path = FabricLoader.getInstance().configDir.resolve(Bridge.MOD_ID).resolve("lang.json")
         if(!path.exists()) {
             val stream = javaClass.classLoader.getResourceAsStream("assets/lang.json")
-            val reader = InputStreamReader(stream)
+            val reader = InputStreamReader(stream!!)
             path.writeText(reader.readText())
         }
         return gson.fromJson<Map<String, String>>(path.reader(), Map::class.java)

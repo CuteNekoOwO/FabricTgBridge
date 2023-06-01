@@ -9,13 +9,15 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
 import net.minecraft.text.Text
 import okhttp3.OkHttpClient
+import org.slf4j.Logger
+import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.net.InetSocketAddress
 import java.net.Proxy
 import java.time.Duration
 
-class TgBot {
+class TgBot(val LOGGER: Logger) {
     private val config = Bridge.CONFIG
     private val proxy = if (!config.proxyEnabled) Proxy.NO_PROXY else Proxy(Proxy.Type.HTTP, InetSocketAddress(config.proxyHost, config.proxyPort))
     private val client = OkHttpClient
@@ -130,7 +132,7 @@ class TgBot {
 
 
     private fun onMessageHandler(
-        @Suppress("unused_parameter") ctx: HandlerContext
+        ctx: HandlerContext
     ) {
         val msg = ctx.message!!
         if (config.chatId != msg.chat.id) {
@@ -156,13 +158,37 @@ class TgBot {
         val formatted = username?.let {
             String.format(config.telegramFormat, username, text)
         } ?: text
-        api.sendMessage(config.chatId, formatted)
+        try {
+            val result = api.sendMessage(config.chatId, formatted)
+            if(!result.ok) {
+                LOGGER.error(result.description)
+            }
+        } catch (e: HttpException) {
+            e.response()?.errorBody()?.string()?.let {
+                LOGGER.error(it)
+                LOGGER.error(formatted)
+            }
+        } catch (e: Exception) {
+            LOGGER.error(e.message)
+        }
     }
 
     suspend fun sendMessageWithoutParse(text: String, username: String? = null) {
         val formatted = username?.let {
             String.format(config.telegramFormat, username, text)
         } ?: text
-        api.sendMessageWithoutParse(config.chatId, formatted)
+        try {
+            val result = api.sendMessageWithoutParse(config.chatId, formatted)
+            if(!result.ok) {
+                LOGGER.error(result.description)
+            }
+        } catch (e: HttpException) {
+            e.response()?.errorBody()?.string()?.let {
+                LOGGER.error(it)
+                LOGGER.error(formatted)
+            }
+        } catch (e: Exception) {
+            LOGGER.error(e.message)
+        }
     }
 }
