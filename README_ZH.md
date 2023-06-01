@@ -13,7 +13,7 @@
 
 ## 安装
 
-1. 从 [Releases](./releases) 下载本mod，并下载依赖 [Fabric API](https://modrinth.com/mod/fabric-api/) 和 [Fabric Language Kotlin](https://modrinth.com/mod/fabric-language-kotlin/)。把他们丢进服务器的`mods`文件夹。
+1. 从 [Releases](https://github.com/CuteNekoOwO/FabricTgBridge/releases) 下载本mod，并下载依赖 [Fabric API](https://modrinth.com/mod/fabric-api/) 和 [Fabric Language Kotlin](https://modrinth.com/mod/fabric-language-kotlin/)。把他们丢进服务器的`mods`文件夹。
 2. 启动服务器来生成默认的配置文件。
 3. 用 [BotFather](https://t.me/BotFather) 创建一个 Telegram 机器人，并获取Token。要把群消息转发到Minecraft还需关闭 `Privacy mode` 。
 4. 打开配置文件（在 `config/tgbridge/config.json`），把Token写进去。
@@ -28,24 +28,28 @@
 
 具体说明如下。
 
-| 名称 | 类型 | 说明 |
-| ----- | ---- | ------ |
-| botToken | String | 机器人的 Token。 |
-| chatId | Int | 群聊ID。 |
-| telegramAPI | String | API地址。使用反向代理时修改这里。 |
-| pollTimeout | Int | **当你的网络连接不太好的时候调小一点** |
-| sendChatMessage | Boolean | 是否发送游戏聊天到群。 |
-| sendGameMessage | Boolean | 是否发送游戏事件到群。 |
-| sendTelegramMessage | Boolean | 是否发送群聊消息到游戏。 |
-| messageTrim | Int | 如果消息比此数值长，把它切断。设为0禁用。 |
-| sendServerStarted | Boolean | 是否发送服务器启动消息。 |
-| sendServerStopping | Boolean | 是否发送服务器关闭消息。 |
-| minecraftFormat | String | Minecraft中看到的群消息样式。 `%1$s` 为发送者名字。 `%2$s` 为消息内容。 |
-| telegramFormat | String | 群聊中看到的Minecraft消息样式 `%1$s` 为发送者名字。 `%2$s` 为消息内容。 [支持一些 HTML 风格的格式化](https://core.telegram.org/bots/api#html-style) |
-| serverStartedMessage | String | 服务器启动时发送的消息内容。 |
-| serverStoppingMessage | String | 服务器关闭时发送的消息内容。 |
-| admins | String[] | 能够在群聊中执行服务器指令的管理员列表。使用Telegram的 `username` 。 |
-| noPermission | String | 非管理在群聊使用 `/cmd` 命令时的提示。 |
+| 名称                    | 类型       | 说明                                                                                                                 |
+|-----------------------|----------|--------------------------------------------------------------------------------------------------------------------|
+| botToken              | String   | 机器人的 Token。                                                                                                        |
+| chatId                | Int      | 群聊ID。                                                                                                              |
+| telegramAPI           | String   | API地址。使用反向代理时修改这里。                                                                                                 |
+| pollTimeout           | Int      | **当你的网络连接不太好的时候调小一点**                                                                                              |
+| useHtmlFormat         | Boolean  | 是否使用Telegram的HTML格式。                                                                                               |
+| sendChatMessage       | Boolean  | 是否发送游戏聊天到群。                                                                                                        |
+| sendGameMessage       | Boolean  | 是否发送游戏事件到群。                                                                                                        |
+| sendTelegramMessage   | Boolean  | 是否发送群聊消息到游戏。                                                                                                       |
+| messageTrim           | Int      | 如果消息比此数值长，把它切断。设为0禁用。                                                                                              |
+| sendServerStarted     | Boolean  | 是否发送服务器启动消息。                                                                                                       |
+| sendServerStopping    | Boolean  | 是否发送服务器关闭消息。                                                                                                       |
+| minecraftFormat       | String   | Minecraft中看到的群消息样式。 `%1$s` 为发送者名字。 `%2$s` 为消息内容。                                                                   |
+| telegramFormat        | String   | 群聊中看到的Minecraft消息样式 `%1$s` 为发送者名字。 `%2$s` 为消息内容。 [支持一些 HTML 风格的格式化](https://core.telegram.org/bots/api#html-style) |
+| serverStartedMessage  | String   | 服务器启动时发送的消息内容。                                                                                                     |
+| serverStoppingMessage | String   | 服务器关闭时发送的消息内容。                                                                                                     |
+| admins                | String[] | 能够在群聊中执行服务器指令的管理员列表。使用Telegram的 `username` 。                                                                       |
+| noPermission          | String   | 非管理在群聊使用 `/cmd` 命令时的提示。                                                                                            |
+| proxyEnabled          | Boolean  | 是否开启http代理。                                                                                                        |
+| proxyHost             | String   | http代理服务器地址。                                                                                                       |
+| proxyPort             | Int      | http代理端口。                                                                                                          |
 
 ## 本地化
 

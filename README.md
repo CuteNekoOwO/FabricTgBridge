@@ -14,7 +14,7 @@ Sync message between telegram group and fabric minecraft server.
 
 ## Installation
 
-1. Download this mod from [Releases](./releases) and dependencies [Fabric API](https://modrinth.com/mod/fabric-api/), [Fabric Language Kotlin](https://modrinth.com/mod/fabric-language-kotlin/). Put them in your server `mods` directory.
+1. Download this mod from [Releases](https://github.com/CuteNekoOwO/FabricTgBridge/releases) and dependencies [Fabric API](https://modrinth.com/mod/fabric-api/), [Fabric Language Kotlin](https://modrinth.com/mod/fabric-language-kotlin/). Put them in your server `mods` directory.
 2. Start the server to generate a default configuration file.
 3. Create a telegram bot at [BotFather](https://t.me/BotFather) and obtain your bot token. Remember to disable `Privacy mode` if you want to send group message to minecraft.
 4. Open your configuration file (at `config/tgbridge/config.json`) and write in your bot token.
@@ -29,24 +29,28 @@ The configuration file is located at `config/tgbridge/config.json`. It's a json 
 
 A detailed explanation is here.
 
-| Field | Type | Detail |
-| ----- | ---- | ------ |
-| botToken | String | Your bot token. |
-| chatId | Int | Your group chat ID. |
-| telegramAPI | String | The API url. Change this if you want to use a reversed proxy. |
+| Field | Type | Detail                                                                                                                                                                                                                        |
+| ----- | ---- |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| botToken | String | Your bot token.                                                                                                                                                                                                               |
+| chatId | Int | Your group chat ID.                                                                                                                                                                                                           |
+| telegramAPI | String | The API url. Change this if you want to use a reversed proxy.                                                                                                                                                                 |
 | pollTimeout | Int | The bot keeps sending requests to telegram server to obtain new messages. If no new messages is aquired for `value` seconds, the bot will send a request again. **Smaller value is recommended if your network is not good.** |
-| sendChatMessage | Boolean | Whether to send game chat messages to your group. |
-| sendGameMessage | Boolean | Whether to send game event messages to your group. |
-| sendTelegramMessage | Boolean | Whether to send telegram messages to Minecraft. |
-| messageTrim | Int | Trim the message sent to Minecraft if it is longer than `value`. Use 0 to disable trimming. |
-| sendServerStarted | Boolean | Whether to send server started message to your group. |
-| sendServerStopping | Boolean | Whether to send server stopping message to your group. |
-| minecraftFormat | String | How group chat messages look like in minecraft. `%1$s` for sender's name. `%2$s` for the message. |
-| telegramFormat | String | How minecraft chat messages look like in telegram group. `%1$s` for sender's name. `%2$s` for the message. [Support some HTML style formatting](https://core.telegram.org/bots/api#html-style) |
-| serverStartedMessage | String | What will be sent to group when the server has started. |
-| serverStoppingMessage | String | What will be sent to group when the server is stopping. |
-| admins | String[] | Admins who can run game commands in the group. Use telegram `username`. |
-| noPermission | String | What will be replied when someone who is not admin uses `/cmd` in the group. |
+| useHtmlFormat | Boolean | Whether to use html formatting when sending message to telegram. [Detailed information here](https://core.telegram.org/bots/api#html-style)                                                                                   |
+| sendChatMessage | Boolean | Whether to send game chat messages to your group.                                                                                                                                                                             |
+| sendGameMessage | Boolean | Whether to send game event messages to your group.                                                                                                                                                                            |
+| sendTelegramMessage | Boolean | Whether to send telegram messages to Minecraft.                                                                                                                                                                               |
+| messageTrim | Int | Trim the message sent to Minecraft if it is longer than `value`. Use 0 to disable trimming.                                                                                                                                   |
+| sendServerStarted | Boolean | Whether to send server started message to your group.                                                                                                                                                                         |
+| sendServerStopping | Boolean | Whether to send server stopping message to your group.                                                                                                                                                                        |
+| minecraftFormat | String | How group chat messages look like in minecraft. `%1$s` for sender's name. `%2$s` for the message.                                                                                                                             |
+| telegramFormat | String | How minecraft chat messages look like in telegram group. `%1$s` for sender's name. `%2$s` for the message.                                                                                                                    |
+| serverStartedMessage | String | What will be sent to group when the server has started.                                                                                                                                                                       |
+| serverStoppingMessage | String | What will be sent to group when the server is stopping.                                                                                                                                                                       |
+| admins | String[] | Admins who can run game commands in the group. Use telegram `username`.                                                                                                                                                       |
+| noPermission | String | What will be replied when someone who is not admin uses `/cmd` in the group.                                                                                                                                                  |
+| proxyEnabled | Boolean | Whether to enable http proxy.                                                                                                                                                                                                 |
+| proxyHost | String | Http proxy host address.                                                                                                                                                                                                      |
+| proxyPort | Int | Http proxy port.                                                                                                                                                                                                              |
 
 ## Localization
 
