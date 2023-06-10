@@ -1,8 +1,8 @@
 
 plugins {
-    id 'fabric-loom' version '1.2-SNAPSHOT'
+    id 'fabric-loom' version loom_version
     id 'maven-publish'
-    id "org.jetbrains.kotlin.jvm"
+    id "org.jetbrains.kotlin.jvm" version kotlin_version
     id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
