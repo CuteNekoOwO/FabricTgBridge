@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "tgbridge",
-  "version": "1",
+  "version": "${version}",
 
   "name": "Fabric Telegram Bridge",
   "description": "Sync message between telegram group and fabric minecraft server.",
@@ -9,7 +9,7 @@
     "坊洛"
   ],
   "contact": {
-    "homepage": "https://blog.fangluo.top/",
+    "homepage": "https://cuteneko.eu.org/FabricTgBridge",
     "sources": "https://github.com/CuteNekoOwO/FabricTgBridge"
   },
 
@@ -19,16 +19,19 @@
   "environment": "server",
   "entrypoints": {
     "main": [
-      "cuteneko.tgbridge.Bridge"
+      {
+        "adapter": "kotlin",
+        "value": "cuteneko.tgbridge.Bridge"
+      }
     ]
   },
   "mixins": [
   ],
   "depends": {
-    "fabricloader": ">=0.8.7",
-    "fabric": "*",
-    "fabric-language-kotlin": ">=1.9.1+kotlin.1.8.10",
-    "minecraft": ">=1.19"
+    "fabricloader": ">=0.14.21",
+    "fabric": ">=0.83.0+1.20",
+    "fabric-language-kotlin": ">=1.9.5+kotlin.1.8.22",
+    "minecraft": ">=1.20"
   },
   "suggests": {
   }

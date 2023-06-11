@@ -40,14 +40,21 @@ class TgBot(val LOGGER: Logger) {
 
 
     private suspend fun initialize() {
-        me = api.getMe().result!!
-        val commands = arrayOf(
-            BotCommand("chatID", "Get current chat ID."),
-            BotCommand("cmd", "Run command."),
-            BotCommand("list", "Show online players."),
-            BotCommand("meow", "Meow!")
-        )
-        api.setMyCommands(commands)
+        try {
+            me = api.getMe().result!!
+            val commands = arrayOf(
+                BotCommand("chat_id", "Get current chat ID."),
+                BotCommand("cmd", "Run command."),
+                BotCommand("list", "Show online players."),
+                BotCommand("meow", "Meow!")
+            )
+            api.setMyCommands(SetCommands(commands))
+            api.deleteWebhook(true)
+        } catch (e: HttpException) {
+            e.response()?.errorBody()?.string()?.let {
+                LOGGER.error(it)
+            }
+        }
     }
 
 
@@ -154,15 +161,15 @@ class TgBot(val LOGGER: Logger) {
 
 
 
-    suspend fun sendMessageToTelegram(text: String, username: String? = null) {
+    suspend fun sendMessageToTelegram(text: String, username: String? = null, reply: Long? = null) {
         val formatted = username?.let {
             String.format(config.telegramFormat, username, text)
         } ?: text
         try {
             val result = if(config.useHtmlFormat)
-                api.sendMessage(config.chatId, formatted)
+                api.sendMessage(config.chatId, formatted, reply)
             else
-                api.sendMessageWithoutParse(config.chatId, formatted)
+                api.sendMessageWithoutParse(config.chatId, formatted, reply)
             if(!result.ok) {
                 LOGGER.error(result.description)
             }

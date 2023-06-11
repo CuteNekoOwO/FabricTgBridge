@@ -37,6 +37,6 @@ interface TgApi {
 
     @POST("setMyCommands")
     suspend fun setMyCommands(
-        @Body commands: Array<BotCommand>,
+        @Body commands: SetCommands,
     ): TgResponse<Boolean>
 }

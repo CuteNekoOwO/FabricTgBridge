@@ -9,7 +9,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 
 val i18n = ConfigLoader.getI18n()
-fun Message.toText(trim: Int = 20, showMore: Boolean = true): Text {
+fun Message.toText(trim: Int = 0, showMore: Boolean = true): Text {
     val text = Text.empty()
 
     replyToMessage?.let {
@@ -23,7 +23,7 @@ fun Message.toText(trim: Int = 20, showMore: Boolean = true): Text {
                 .setStyle(
                     Style.EMPTY
                         .withColor(Formatting.GOLD)
-                        .withHoverEvent(HoverEvent(HoverEvent.Action.SHOW_TEXT, it.toText(0)))
+                        .withHoverEvent(HoverEvent(HoverEvent.Action.SHOW_TEXT, it.toText()))
                 )
         )
     }
@@ -155,7 +155,7 @@ private fun String.trimMessage(size: Int, showMore: Boolean = true): Text {
         text.append(msg)
         return text
     }
-    text.append("${this.substring(0, size)}...")
+    text.append("${msg.substring(0, size)}...")
     if(showMore) {
         text.append(
             Text.literal(i18n.more)

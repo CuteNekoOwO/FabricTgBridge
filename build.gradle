@@ -72,15 +72,15 @@ jar {
     }
 }
 
-task remap(type: Copy) {
+tasks.register('remap', Copy) {
     dependsOn(remapJar)
     from(zipTree(tasks.remapJar.archiveFile))
     into("build/classes/kotlin/main/")
 }
 
-inspectClassesForKotlinIC {
-    dependsOn(remap)
-}
+//inspectClassesForKotlinIC {
+//    dependsOn(remap)
+//}
 
 shadowJar {
     dependsOn(remap)

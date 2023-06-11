@@ -17,6 +17,7 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
+import net.minecraft.util.Formatting
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.FileNotFoundException
@@ -53,13 +54,29 @@ class Bridge : ModInitializer {
                     it.hasPermissionLevel(4)
                 }
                 .executes {
-                    CONFIG = ConfigLoader.load()
-                    runBlocking {
-                        BOT.stop()
-                        BOT = TgBot(LOGGER)
-                        BOT.startPolling()
+                    if(RELOADING) {
+                        it.source.sendMessage(Text.literal("A reload is already in progress!").formatted(Formatting.RED))
+                        return@executes 1
                     }
-                    it.source.sendMessage(Text.literal("Reloaded!"))
+                    RELOADING = true
+                    it.source.sendMessage(Text.literal("Reloading!"))
+                    CONFIG = ConfigLoader.load()
+                    GlobalScope.launch {
+                        try {
+
+                            BOT.stop()
+                            BOT = TgBot(LOGGER)
+                            BOT.startPolling()
+                            it.source.sendMessage(Text.literal("Reloaded!"))
+                        }
+                        catch (e: Exception) {
+                            it.source.sendMessage(Text.literal("Error occurred!").formatted(Formatting.RED))
+                            it.source.sendMessage(Text.literal(e.message))
+                        }
+                        finally {
+                            RELOADING = false
+                        }
+                    }
                     0
                 })
         }
@@ -105,6 +122,7 @@ class Bridge : ModInitializer {
         lateinit var CONFIG: Config
         lateinit var LANG: Map<String, String>
         lateinit var BOT: TgBot
+        var RELOADING: Boolean = false
         fun sendMessage(text: Text?) {
             SERVER.playerManager.playerList.forEach{
                 it.sendMessage(text)
