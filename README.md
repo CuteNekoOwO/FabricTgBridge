@@ -1,3 +1,7 @@
+# Future of This Repository
+This GitHub repository is likely to be permanently discontinued because the main developer, MeowBot233, passed away on September 16, 2023, due to Ewing's sarcoma. 
+We will always remember her.
+
 # FabricTgBridge
 
 Sync message between telegram group and fabric minecraft server.
