@@ -1,3 +1,7 @@
+# 这个仓库的未来
+这个Github仓库很可能被永久停用，因为主要开发者MeowBot233于2023年9月16日因为尤文肉瘤去世。
+我们永远纪念她。
+
 # FabricTgBridge
 
 在Fabric Minecraft服务器和Telegram群组间同步消息。
